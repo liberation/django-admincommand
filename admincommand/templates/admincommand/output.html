@@ -1,0 +1,20 @@
+{% extends "admin/change_form.html" %}
+
+{% load i18n %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}libe/js/jquery.js"></script>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="../../../">{% trans "Home" %}</a> &rsaquo;
+        <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo;
+        {{ command_name }}
+    </div>
+{% endblock %}
+
+{% block content %}
+    {{ output }}
+{% endblock %}
