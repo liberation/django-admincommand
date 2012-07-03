@@ -6,7 +6,7 @@ from django.core.management import get_commands
 from django.core.management import load_command_class
 from django.utils.importlib import import_module
 from django.core.management.base import BaseCommand
-
+from django.contrib.auth.models import User
 from async import schedule
 
 from admincommand.models import AdminCommand, CommandOutput
@@ -48,8 +48,9 @@ def get_command(name):
     return klass
 
 
-def call_command(command_name, user, args=None, kwargs=None):
+def call_command(command_name, user_pk, args=None, kwargs=None):
     """Call command and store output"""
+    user = User.objects.get(pk=user_pk)
     kwargs = kwargs if kwargs else {}
     args = args if args else []
     output = StringIO()
