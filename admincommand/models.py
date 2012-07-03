@@ -7,11 +7,15 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Permission
+from django.db.utils import DatabaseError
 
 from admincommand.utils import generate_instance_name
 
-
-ct, created = ContentType.objects.get_or_create(app_label='admincommand', model='admincommand')
+try:
+    ct, created = ContentType.objects.get_or_create(app_label='admincommand', model='admincommand')
+except DatabaseError:
+    # if the database is not synced it will fail to create the content type
+    pass
 
 
 class AdminCommand(SneakModel):
@@ -59,12 +63,3 @@ class AdminCommand(SneakModel):
         for runnable_command in core.get_admin_commands().values():
             all.append(runnable_command)
         return all
-
-
-class CommandOutput(models.Model):
-    tasker = models.ForeignKey(User)
-    command_name = models.CharField(max_length=255)
-    output = models.TextField()
-
-    def __unicode__(self):
-        return self.command_name

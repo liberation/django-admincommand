@@ -9,11 +9,10 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from async import schedule
 
-from admincommand.models import AdminCommand, CommandOutput
+from admincommand.models import AdminCommand
 
 
-# Cache variable to store runnable commands configuration defined
-# as runnable commands in settings.ADMIN_COMMANDS
+# Cache variable to store runnable commands configuration 
 _command_configs = {}
 
 
@@ -56,12 +55,7 @@ def call_command(command_name, user_pk, args=None, kwargs=None):
     output = StringIO()
     kwargs['stdout'] = output
     management.call_command(command_name, *args, **kwargs)
-    CommandOutput(
-        tasker=user,
-        output=output.getvalue(),
-        command_name=command_name,
-    ).save()
-
+    return output.getvalue()
 
 def run_command(command_config, cleaned_data, user):
     if hasattr(command_config, 'get_command_arguments'):

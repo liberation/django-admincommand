@@ -14,7 +14,6 @@ from sneak.admin import SneakAdmin
 
 from admincommand.query import CommandQuerySet
 from admincommand.models import AdminCommand as AdminCommandModel
-from admincommand.models import CommandOutput
 from admincommand import core
 
 
@@ -91,4 +90,3 @@ class AdminCommandAdmin(SneakAdmin):
     command_name.allow_tags = True
 
 admin.site.register(AdminCommandModel, AdminCommandAdmin)
-admin.site.register(CommandOutput)
