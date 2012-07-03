@@ -18,7 +18,7 @@ Settings
 You need to activate the Django admin in the settings and ``urls.py`` 
 depending on your needs the configuration may vary, refer
 to the Django documentation related to the 
-`admin application <https://docs.djangoproject.com/en/dev/ref/contrib/admin/>`.
+`admin application <https://docs.djangoproject.com/en/dev/ref/contrib/admin/>`_.
 
 Don't forget to add the application where you defined management
 commands in the list of installed applications. This might be already
@@ -30,10 +30,10 @@ Make magic happens
 ==================
 
 
-Create a Django Management Command:
+Create a Django Management Command::
 
-  .. code-block:: python
     # ./music/management/commands/lyrics.py
+
 
     class Command(BaseCommand):
         help = "Compute lyrics based an bitorological fluctuations"
@@ -42,9 +42,8 @@ Create a Django Management Command:
             # algorithm that generated lyrics based on a title and a dictionary
 
 
-Then you will have to create a configuration class for the command:
+Then you will have to create a configuration class for the command::
 
-  .. code-block:: python
      # ./music/admincommands.py
 
      from admincommands.models import AdminCommand
@@ -69,10 +68,8 @@ Asynchronous tasks
 
 If you want to execute commands asynchronously you have to 
 specify it in the AdminCommand configuration class with the 
-``asynchronous`` property set to ``True``:
+``asynchronous`` property set to ``True``::
 
-
-  .. code-block:: python
      # ./music/admincommands.py
 
      from admincommands.models import AdminCommand
