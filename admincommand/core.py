@@ -68,7 +68,7 @@ def run_command(command_config, cleaned_data, user):
     else:
         args, kwargs = list(), dict()
     if command_config.asynchronous:
-        task = schedule(call_command, [command_config.command_name(), args, kwargs, user.pk])
+        task = schedule(call_command, [command_config.command_name(), user.pk, args, kwargs])
         return task
     else:
         # Change stdout to a StringIO to be able to retrieve output and
