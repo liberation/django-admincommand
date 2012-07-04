@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Permission
 from django.db.utils import DatabaseError
 
-from admincommand.utils import generate_instance_name
+from admincommand.utils import generate_instance_name, generate_human_name
 
 try:
     ct, created = ContentType.objects.get_or_create(app_label='admincommand', model='admincommand')
@@ -56,6 +56,12 @@ class AdminCommand(SneakModel):
 
     def command_name(self):
         return generate_instance_name(type(self).__name__)
+
+    def name(self):
+        return generate_human_name(type(self).__name__)
+
+    def url_name(self):
+        return type(self).__name__.lower()
 
     def permission_codename(self):
         return 'can_run_command_%s' % self.command_name()

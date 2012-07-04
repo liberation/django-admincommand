@@ -32,7 +32,7 @@ def get_admin_commands():
                         and AdminCommandClass is not AdminCommand
                         and issubclass(AdminCommandClass, AdminCommand)):
                         command_config = AdminCommandClass()
-                        _command_configs[command_config.command_name()] = command_config
+                        _command_configs[command_config.url_name()] = command_config
     return _command_configs
 
 

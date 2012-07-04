@@ -36,8 +36,8 @@ class AdminCommandAdmin(SneakAdmin):
         )
         return urlpatterns + super(AdminCommandAdmin, self).get_urls()
 
-    def run_command_view(self, request, command_name):
-        admin_command = core.get_admin_commands()[command_name]
+    def run_command_view(self, request, url_name):
+        admin_command = core.get_admin_commands()[url_name]
 
         if not request.user.has_perm(admin_command.permission_codename()):
             return HttpResponseForbidden()
@@ -83,8 +83,8 @@ class AdminCommandAdmin(SneakAdmin):
         path = reverse('admin:admincommand_admincommand_changelist', )
         return '<a href="%srun/%s">%s: %s</a>' % (
             path,
-            obj.command_name(),
-            obj.command_name(),
+            obj.url_name(),
+            obj.name(),
             obj.command().help,
         )
     command_name.allow_tags = True
