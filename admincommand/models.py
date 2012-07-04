@@ -1,5 +1,6 @@
 from sneak.models import SneakModel
 
+from django import forms
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -32,6 +33,9 @@ class AdminCommand(SneakModel):
     asynchronous = False
 
     objects = None
+
+    class form(forms.Form):
+        pass
 
     def __init__(self, *args, **kwargs):
         super(AdminCommand, self).__init__(*args, **kwargs)
