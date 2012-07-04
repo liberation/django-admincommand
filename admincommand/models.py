@@ -48,6 +48,11 @@ class AdminCommand(SneakModel):
             perm.name = 'Can Run %s' % self.command_name()
             perm.save()
 
+    def get_help(self):
+        if hasattr(self, 'help'):
+            return self.help
+        return self.command().help
+
     def command(self):
         """Getter of the management command import core"""
         import core

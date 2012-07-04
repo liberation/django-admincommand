@@ -45,18 +45,18 @@ class AdminCommandAdmin(SneakAdmin):
         opts = self.model._meta
         app_label = opts.app_label
 
-        help = admin_command.command().help
+        help = admin_command.get_help()
 
         ctx = {
             # original needed ``change_form.html`` context variables
             'module_name': force_unicode(opts.verbose_name_plural),
-            'title': admin_command.command_name(),
+            'title': admin_command.name(),
             'is_popup': False,
             'root_path': None,
             'app_label': app_label,
 
             # ``run.html`` context
-            'command_name': command_name,
+            'command_name': admin_command.name,
             'help': help,
         }
 
@@ -85,7 +85,7 @@ class AdminCommandAdmin(SneakAdmin):
             path,
             obj.url_name(),
             obj.name(),
-            obj.command().help,
+            obj.get_help(),
         )
     command_name.allow_tags = True
 
