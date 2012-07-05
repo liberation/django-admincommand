@@ -73,6 +73,8 @@ class AdminCommandAdmin(SneakAdmin):
                     return render(request, 'admincommand/output.html', ctx)
                 path = reverse('admin:admincommand_admincommand_changelist')
                 return HttpResponseRedirect(path)
+            else:
+                ctx['form'] = form
         else:
             ctx['form'] = admin_command.form()
         return render(request, 'admincommand/run.html', ctx)
