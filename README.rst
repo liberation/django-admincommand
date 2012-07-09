@@ -87,3 +87,11 @@ specify it in the AdminCommand configuration class with the
 
 
 You also need to run periodically ``flush_queue`` from ``django-async`` application for that matter don't forget to install the application.
+
+Permissions
+===========
+
+You MUST add to every user or groups that should have access to the list of commands 
+«Can change admincommand» permission. Every admin command gets it's own permission 
+«Can Run AnAdminCommand», so you can add it to proper users or group. Users will
+only see and be able to execute admin commands for which they have the permission.

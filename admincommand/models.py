@@ -45,8 +45,9 @@ class AdminCommand(SneakModel):
             content_type=ct,
         )
         if created:
-            perm.name = 'Can Run %s' % self.command_name()
-            perm.save()
+            import pdb; pdb.set_trace()
+            self.perm.name = 'Can run %s' % self.command_name()
+            self.perm.save()
 
     def get_help(self):
         if hasattr(self, 'help'):
@@ -74,7 +75,5 @@ class AdminCommand(SneakModel):
     @classmethod
     def all(cls):
         import core
-        all = []
         for runnable_command in core.get_admin_commands().values():
-            all.append(runnable_command)
-        return all
+            yield runnable_command

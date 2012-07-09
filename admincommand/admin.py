@@ -18,8 +18,13 @@ from admincommand import core
 
 
 class AdminCommandAdmin(SneakAdmin):
-    QuerySet = CommandQuerySet
     list_display = ('command_name',)
+
+    def queryset(self, request):
+        # user current user to construct the queryset
+        # so that only commands the user can execute 
+        # will be visible
+        return CommandQuerySet(request.user)
 
     def get_urls(self):
         def wrap(view):
@@ -39,7 +44,8 @@ class AdminCommandAdmin(SneakAdmin):
     def run_command_view(self, request, url_name):
         admin_command = core.get_admin_commands()[url_name]
 
-        if not request.user.has_perm(admin_command.permission_codename()):
+        full_permission_codename = 'admincommand.%s' % admin_command.permission_codename()
+        if not request.user.has_perm(full_permission_codename):
             return HttpResponseForbidden()
         # original needed ``change_form`` context variables
         opts = self.model._meta
