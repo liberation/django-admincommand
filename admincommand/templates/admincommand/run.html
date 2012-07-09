@@ -3,8 +3,11 @@
 {% load i18n %}
 
 {% block extrahead %}
+    <link href="{{ STATIC_URL }}/admin/css/base.css" type="text/css" media="all" rel="stylesheet" />
+    <link href="{{ STATIC_URL }}/admin/css/forms.css" type="text/css" media="all" rel="stylesheet" />
+    <link href="{{ STATIC_URL }}/admin/css/widgets.css" type="text/css" media="all" rel="stylesheet" />
+    <script type="text/javascript" src="{{ STATIC_URL }}/admin/js/core.js"></script>
     {{ block.super }}
-    <script type="text/javascript" src="{{ STATIC_URL }}libe/js/jquery.js"></script>
 {% endblock %}
 
 {% block breadcrumbs %}

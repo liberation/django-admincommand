@@ -9,6 +9,7 @@ from django.conf.urls.defaults import patterns
 from django.utils.encoding import force_unicode
 from django.utils.functional import update_wrapper
 from django.http import HttpResponseForbidden
+from django.utils.safestring import mark_safe
 
 from sneak.admin import SneakAdmin
 
@@ -83,6 +84,7 @@ class AdminCommandAdmin(SneakAdmin):
                 ctx['form'] = form
         else:
             ctx['form'] = admin_command.form()
+        ctx['media'] = mark_safe(ctx['form'].media.render())
         return render(request, 'admincommand/run.html', ctx)
 
     def command_name(self, obj):
