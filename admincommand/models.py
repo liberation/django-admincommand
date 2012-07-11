@@ -45,7 +45,6 @@ class AdminCommand(SneakModel):
             content_type=ct,
         )
         if created:
-            import pdb; pdb.set_trace()
             self.perm.name = 'Can run %s' % self.command_name()
             self.perm.save()
 
