@@ -10,6 +10,8 @@ from django.utils.encoding import force_unicode
 from django.utils.functional import update_wrapper
 from django.http import HttpResponseForbidden
 from django.utils.safestring import mark_safe
+from django.contrib import messages
+from django.utils.translation import ugettext
 
 from sneak.admin import SneakAdmin
 
@@ -78,6 +80,12 @@ class AdminCommandAdmin(SneakAdmin):
                 if not admin_command.asynchronous:
                     ctx['output'] = coreponse
                     return render(request, 'admincommand/output.html', ctx)
+                else:
+                    msg = 'Task is set to run in the next 5 minutes or less'
+                    msg += 'if by any luck, the task went with a duck'
+                    msg += " and did not achieve it's duty, ask for help"
+                    msg = ugettext(msg)
+                    messages.info(request, msg)
                 path = reverse('admin:admincommand_admincommand_changelist')
                 return HttpResponseRedirect(path)
             else:
