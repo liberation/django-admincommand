@@ -5,10 +5,11 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models import signals
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import Permission
 from django.db.utils import DatabaseError
+from django.utils.importlib import import_module
 
 from admincommand.utils import generate_instance_name, generate_human_name
 
@@ -33,18 +34,6 @@ class AdminCommand(SneakModel):
 
     def __init__(self, *args, **kwargs):
         super(AdminCommand, self).__init__(*args, **kwargs)
-        codename = self.permission_codename()
-        ct = ContentType.objects.get(
-            model='admincommand',
-            app_label='admincommand',
-        )
-        self.perm, created = Permission.objects.get_or_create(
-            codename=codename,
-            content_type=ct,
-        )
-        if created:
-            self.perm.name = 'Can run %s' % self.command_name()
-            self.perm.save()
 
     def get_help(self):
         if hasattr(self, 'help'):
@@ -57,20 +46,43 @@ class AdminCommand(SneakModel):
         command = core.get_command(self.command_name())
         return command
 
-    def command_name(self):
-        return generate_instance_name(type(self).__name__)
+    @classmethod
+    def command_name(cls):
+        return generate_instance_name(cls.__name__)
 
     def name(self):
-        return generate_human_name(type(self).__name__)
+        return generate_human_name(cls.__name__)
 
     def url_name(self):
         return type(self).__name__.lower()
 
-    def permission_codename(self):
-        return 'can_run_command_%s' % self.command_name()
+    @classmethod
+    def permission_codename(cls):
+        return 'can_run_command_%s' % cls.command_name()
 
     @classmethod
     def all(cls):
         import core
         for runnable_command in core.get_admin_commands().values():
             yield runnable_command
+
+def sync_db(verbosity = 0, interactive = False, signal = None, **kwargs):
+    for app_module_path in settings.INSTALLED_APPS:
+        try:
+            admin_commands_path = '%s.admincommands' % app_module_path
+            module = import_module(admin_commands_path)
+        except ImportError:
+            pass
+    for subclass in AdminCommand.__subclasses__():
+        codename = subclass.permission_codename()
+        ct = ContentType.objects.get(
+            model='admincommand',
+            app_label='admincommand',
+        )
+        perm = Permission(
+            codename=codename,
+            content_type=ct,
+            name = 'Can run %s' % subclass.command_name(),
+        )
+        perm.save()
+signals.post_syncdb.connect(sync_db)
