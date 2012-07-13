@@ -12,12 +12,6 @@ from django.db.utils import DatabaseError
 
 from admincommand.utils import generate_instance_name, generate_human_name
 
-try:
-    ct, created = ContentType.objects.get_or_create(app_label='admincommand', model='admincommand')
-except DatabaseError:
-    # if the database is not synced it will fail to create the content type
-    pass
-
 
 class AdminCommand(SneakModel):
     """Subclass this class to create an admin command
@@ -40,6 +34,10 @@ class AdminCommand(SneakModel):
     def __init__(self, *args, **kwargs):
         super(AdminCommand, self).__init__(*args, **kwargs)
         codename = self.permission_codename()
+        ct = ContentType.objects.get(
+            model='admincommand',
+            app_label='admincommand',
+        )
         self.perm, created = Permission.objects.get_or_create(
             codename=codename,
             content_type=ct,
