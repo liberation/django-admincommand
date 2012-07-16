@@ -1,15 +1,6 @@
-from sneak.models import SneakModel
-
 from django import forms
-from django.db import models
-from django.conf import settings
-from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
-from django.db.models import signals
-from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
-from django.db.utils import DatabaseError
-from django.utils.importlib import import_module
+
+from sneak.models import SneakModel
 
 from admincommand.utils import generate_instance_name, generate_human_name
 
@@ -65,24 +56,3 @@ class AdminCommand(SneakModel):
         import core
         for runnable_command in core.get_admin_commands().values():
             yield runnable_command
-
-def sync_db(verbosity = 0, interactive = False, signal = None, **kwargs):
-    for app_module_path in settings.INSTALLED_APPS:
-        try:
-            admin_commands_path = '%s.admincommands' % app_module_path
-            module = import_module(admin_commands_path)
-        except ImportError:
-            pass
-    for subclass in AdminCommand.__subclasses__():
-        codename = subclass.permission_codename()
-        ct = ContentType.objects.get(
-            model='admincommand',
-            app_label='admincommand',
-        )
-        perm = Permission(
-            codename=codename,
-            content_type=ct,
-            name = 'Can run %s' % subclass.command_name(),
-        )
-        perm.save()
-signals.post_syncdb.connect(sync_db)
