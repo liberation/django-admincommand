@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.shortcuts import render
+from django.contrib.admin.options import csrf_protect_m
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.conf.urls.defaults import url
@@ -106,5 +108,11 @@ class AdminCommandAdmin(SneakAdmin):
             obj.get_help(),
         )
     command_name.allow_tags = True
+
+    @csrf_protect_m
+    def changelist_view(self, request, extra_context=None):
+        extra_context = {'title': u'Selectionner une commande à lancer'}
+        return super(AdminCommandAdmin, self).changelist_view(request, extra_context)
+
 
 admin.site.register(AdminCommandModel, AdminCommandAdmin)
