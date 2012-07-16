@@ -51,7 +51,7 @@ class AdminCommand(SneakModel):
         return generate_instance_name(cls.__name__)
 
     def name(self):
-        return generate_human_name(cls.__name__)
+        return generate_human_name(type(self).__name__)
 
     def url_name(self):
         return type(self).__name__.lower()
