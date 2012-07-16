@@ -82,7 +82,7 @@ class AdminCommandAdmin(SneakAdmin):
                     return render(request, 'admincommand/output.html', ctx)
                 else:
                     msg = 'Task is set to run in the next 5 minutes or less'
-                    msg += 'if by any luck, the task went with a duck'
+                    msg += ' if by any luck, the task went with a duck'
                     msg += " and did not achieve it's duty, ask for help"
                     msg = ugettext(msg)
                     messages.info(request, msg)
