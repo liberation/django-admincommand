@@ -20,12 +20,12 @@ def sync_db_callback(verbosity=0, interactive=False, signal=None, **kwargs):
             import_module(admin_commands_path)
         except ImportError:
             pass
+    ct = ContentType.objects.get(
+        model='admincommand',
+        app_label='admincommand',
+    )
     for subclass in admincommand.models.AdminCommand.__subclasses__():
         codename = subclass.permission_codename()
-        ct = ContentType.objects.get(
-            model='admincommand',
-            app_label='admincommand',
-        )
         perm, created = Permission.objects.get_or_create(
             codename=codename,
             content_type=ct,
